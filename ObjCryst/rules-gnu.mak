@@ -133,13 +133,16 @@ endif
 #Using COD, with MySQL
 ifneq ($(cod),0)
  ifneq ($(shared-mysql),1)
-  COD_LIB = $(DIR_STATIC_LIBS)/lib/libmysqlclient.a
+  codlib = $(DIR_STATIC_LIBS)/lib/libmysqlclient.a
+  LDCOD = $(DIR_STATIC_LIBS)/lib/libmysqlclient.a
  else
-  COD_LIB = -lmysqlclient
+  codlib =
+  LDCOD = -lmysqlclient
  endif
  COD_FLAGS = -D__FOX_COD__ -I/usr/include/mysql
 else
- COD_LIB :=
+ codlib :=
+ LDCOD :=
  COD_FLAGS :=
 endif
 
@@ -156,7 +159,7 @@ else
       CPPFLAGS = -g -Wall -D__DEBUG__ ${SSE_FLAGS} ${COD_FLAGS}
    endif
    DEPENDFLAGS = ${SEARCHDIRS} ${GL_FLAGS} ${WXCRYSTFLAGS} ${FFTW_FLAGS} ${REAL_FLAG}
-   LOADLIBES = -lm -lcryst -lCrystVector -lQuirks -lRefinableObj -lcctbx ${LDNEWMAT} ${PROFILELIB} ${GL_LIB} ${WX_LDFLAGS} ${FFTW_LIB} ${COD_LIB}
+   LOADLIBES = -lm -lcryst -lCrystVector -lQuirks -lRefinableObj -lcctbx ${LDNEWMAT} ${PROFILELIB} ${GL_LIB} ${WX_LDFLAGS} ${FFTW_LIB} ${LDCOD}
  else
    ifdef RPM_OPT_FLAGS
       # we are building a RPM !
@@ -166,7 +169,7 @@ else
       CPPFLAGS = -O3 -w -ffast-math -fstrict-aliasing -pipe -fomit-frame-pointer -funroll-loops -ftree-vectorize ${SSE_FLAGS} ${COD_FLAGS}
    endif
    DEPENDFLAGS = ${SEARCHDIRS} ${GL_FLAGS} ${WXCRYSTFLAGS} ${FFTW_FLAGS} ${REAL_FLAG}
-   LOADLIBES = -lm -lcryst -lCrystVector -lQuirks -lRefinableObj -lcctbx ${LDNEWMAT} ${PROFILELIB} ${GL_LIB} ${WX_LDFLAGS} ${FFTW_LIB} ${COD_LIB}
+   LOADLIBES = -lm -lcryst -lCrystVector -lQuirks -lRefinableObj -lcctbx ${LDNEWMAT} ${PROFILELIB} ${GL_LIB} ${WX_LDFLAGS} ${FFTW_LIB} ${LDCOD}
  endif
 endif
 # Add to statically link: -nodefaultlibs -lgcc /usr/lib/libstdc++.a
